@@ -1,0 +1,8 @@
+.movie-grid {
+    grid-template-columns: repeat(8, (minmax(180px, 1fr)));
+}
+
+.movie-card {
+  background-color: #29333d;
+  transition: transform 0.2s ease;
+}
