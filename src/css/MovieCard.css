@@ -20,7 +20,7 @@
 .movie-overlay {
   position: absolute;
   bottom: 10px;
-  right: 10px;
+  left: 30%;
 }
 
 .favourite-btn {
@@ -29,12 +29,25 @@
   border-radius: 50%;
   cursor: pointer;
   padding: 8px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .favourite-btn.active {
-  background: red;
+  background: pink;
   color: white;
+}
+
+.watchlist {
+  color: rgba(0,255,255, 0.8);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.watchlist.active {
+  background: blueviolet;
 }
 
 .movie-info {

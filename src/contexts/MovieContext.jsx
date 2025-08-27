@@ -6,6 +6,7 @@ export const useMovieContext = () => useContext(MovieContext)
 
 export const MovieProvider = ({children}) => {
     const [favourites, setFavourites] = useState([])
+    const [watchlist, setWatchlist] = useState([])
 
     useEffect(() => {
         const storedFavs = localStorage.getItem("favourites")
@@ -16,6 +17,16 @@ export const MovieProvider = ({children}) => {
     useEffect(() => {
         localStorage.setItem('favourites', JSON.stringify(favourites))
     }, [favourites])
+
+    useEffect(() => {
+        const storedWatchlist = localStorage.getItem("watchlist")
+
+        if (storedWatchlist) setWatchlist(JSON.parse(storedWatchlist))
+    }, [])
+
+    useEffect(() => {
+        localStorage.setItem('watchlist', JSON.stringify(watchlist))
+    }, [watchlist])
 
     const addToFavourites = (movie) => {
         setFavourites(prev => [...prev, movie])
@@ -29,11 +40,27 @@ export const MovieProvider = ({children}) => {
         return favourites.some(movie => movie.id === movieId)
     }
 
+    const addToWatchlist = (movie) => {
+        setWatchlist(prev => [...prev, movie])
+    }
+
+    const removeFromWatchlist = (movieId) => {
+        setWatchlist(prev => prev.filter(movie => movie.id !== movieId))
+    }
+
+    const isWatchlist = (movieId) => {
+        return watchlist.some(movie => movie.id === movieId)
+    }
+
     const value = {
         favourites,
         addToFavourites,
         removeFromFavourites,
-        isFavourites
+        isFavourites,
+        watchlist,
+        addToWatchlist,
+        removeFromWatchlist,
+        isWatchlist
     }
 
     return <MovieContext.Provider value={value}>

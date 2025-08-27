@@ -1,8 +1,32 @@
-.movie-grid {
-    grid-template-columns: repeat(8, (minmax(180px, 1fr)));
+.favourites-list, 
+.watchlists-list{
+    display: grid;
+    grid-template-columns: repeat(8, minmax(180px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
 .movie-card {
   background-color: #29333d;
   transition: transform 0.2s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.02);
+}
+
+.movie-poster {
+  position: relative;
+}
+
+.movie-poster img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.movie-overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 30%;
 }
