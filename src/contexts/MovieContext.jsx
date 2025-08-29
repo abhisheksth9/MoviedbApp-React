@@ -6,38 +6,35 @@ export const useMovieContext = () => useContext(MovieContext)
 
 export const MovieProvider = ({children}) => {
     const [favourites, setFavourites] = useState([])
+    const [likes, setLikes] = useState([])
     const [watchlist, setWatchlist] = useState([])
 
     useEffect(() => {
-        const storedFavs = localStorage.getItem("favourites")
-        
-        if (storedFavs) setFavourites(JSON.parse(storedFavs))
-    }, [])
-
-    useEffect(() => {
-        localStorage.setItem('favourites', JSON.stringify(favourites))
-    }, [favourites])
-
-    useEffect(() => {
+        const storedLikes = localStorage.getItem("likes")
         const storedWatchlist = localStorage.getItem("watchlist")
-
+        const storedFavourites = localStorage.getItem("favourites")
+        
+        if (storedLikes) setLikes(JSON.parse(storedLikes))
         if (storedWatchlist) setWatchlist(JSON.parse(storedWatchlist))
+        if (storedFavourites) setFavourites(JSON.parse(storedFavourites))
     }, [])
 
     useEffect(() => {
+        localStorage.setItem('likes', JSON.stringify(likes))
         localStorage.setItem('watchlist', JSON.stringify(watchlist))
-    }, [watchlist])
+        localStorage.setItem('favourites', JSON.stringify(favourites))
+    }, [likes, watchlist, favourites])
 
-    const addToFavourites = (movie) => {
-        setFavourites(prev => [...prev, movie])
+    const addToLikes = (movie) => {
+        setLikes(prev => [...prev, movie])
     }
 
-    const removeFromFavourites = (movieId) => {
-        setFavourites(prev => prev.filter(movie => movie.id !== movieId))
+    const removeFromLikes = (movieId) => {
+        setLikes(prev => prev.filter(movie => movie.id !== movieId))
     }
 
-    const isFavourites = (movieId) => {
-        return favourites.some(movie => movie.id === movieId)
+    const isLikes = (movieId) => {
+        return likes.some(movie => movie.id === movieId)
     }
 
     const addToWatchlist = (movie) => {
@@ -52,15 +49,31 @@ export const MovieProvider = ({children}) => {
         return watchlist.some(movie => movie.id === movieId)
     }
 
+     const addToFavourites = (movie) => {
+        setFavourites(prev => [...prev, movie])
+    }
+
+    const removeFromFavourites = (movieId) => {
+        setFavourites(prev => prev.filter(movie => movie.id !== movieId))
+    }
+
+    const isFavourites = (movieId) => {
+        return favourites.some(movie => movie.id === movieId)
+    }
+
     const value = {
-        favourites,
-        addToFavourites,
-        removeFromFavourites,
-        isFavourites,
+        likes,
+        addToLikes,
+        removeFromLikes,
+        isLikes,
         watchlist,
         addToWatchlist,
         removeFromWatchlist,
-        isWatchlist
+        isWatchlist,
+        favourites,
+        addToFavourites,
+        removeFromFavourites,
+        isFavourites
     }
 
     return <MovieContext.Provider value={value}>

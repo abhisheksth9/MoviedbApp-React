@@ -2,24 +2,38 @@ import '../css/Profile.css'
 import { useMovieContext } from '../contexts/MovieContext'
 import MovieCard from '../components/MovieCard'
 
-export function Favourite() {
+export function Favourites() {
     const {favourites} = useMovieContext();
+    return (
+        <div className='favourites-container'>
+            <h2 className='list'>Five Favourites</h2>
+            <div className='favourites-list'>
+                {favourites.map((movie) => (
+                    <MovieCard movie={movie} key={movie.id} />
+                ))}
+            </div>
+        </div>
+    )
+}
 
-    if (favourites) {
+export function Likes() {
+    const {likes} = useMovieContext();
+
+    if (likes) {
         return (
             <div className='list'>
-                <h2 className='favourites'>Your Favourites</h2>
-                <div className="favourites-list">
-                    {favourites.map((movie) => (
+                <h2 className='likes'>Likes</h2>
+                <div className="likes-list">
+                    {likes.map((movie) => (
                         <MovieCard movie={movie} key={movie.id} />
                     ))}
                 </div>  
             </div>
         )
     }
-    return <div className="favourite-empty">
+    return <div className="likes-empty">
         <h3>No favourite movies yet</h3>
-        <p>Start adding movies to your favourites</p>
+        <p>Start adding movies to your likes</p>
     </div>
 }
 
@@ -47,7 +61,8 @@ export function Watchlist() {
 export default function Profile(){
     return(
         <section>
-            <Favourite />
+            <Favourites />
+            <Likes />
             <Watchlist />
         </section>
     )
