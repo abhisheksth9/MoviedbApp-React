@@ -1,69 +1,74 @@
-import '../css/Profile.css'
 import { useMovieContext } from '../contexts/MovieContext'
 import MovieCard from '../components/MovieCard'
 
 export function Favourites() {
-    const {favourites} = useMovieContext();
-    return (
-        <div className='favourites-container'>
-            <h2 className='list'>Five Favourites</h2>
-            <div className='favourites-list'>
-                {favourites.map((movie) => (
-                    <MovieCard movie={movie} key={movie.id} />
-                ))}
-            </div>
-        </div>
-    )
+  const { favourites } = useMovieContext();
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Five Favourites</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {favourites.map((movie) => (
+          <MovieCard movie={movie} key={movie.id} />
+        ))}
+      </div>
+    </div>
+  )
 }
 
 export function Likes() {
-    const {likes} = useMovieContext();
+  const { likes } = useMovieContext();
 
-    if (likes) {
-        return (
-            <div className='list'>
-                <h2 className='likes'>Likes</h2>
-                <div className="likes-list">
-                    {likes.map((movie) => (
-                        <MovieCard movie={movie} key={movie.id} />
-                    ))}
-                </div>  
-            </div>
-        )
-    }
-    return <div className="likes-empty">
-        <h3>No favourite movies yet</h3>
-        <p>Start adding movies to your likes</p>
+  if (likes && likes.length > 0) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Likes</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {likes.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-6 text-center text-gray-600">
+      <h3 className="text-lg font-semibold">No favourite movies yet</h3>
+      <p className="mt-2">Start adding movies to your likes</p>
     </div>
+  )
 }
 
 export function Watchlist() {
-    const {watchlist} = useMovieContext();
+  const { watchlist } = useMovieContext();
 
-    if (watchlist){
-        return (
-            <div className='list'>
-                <h2 className='watchlists'>Watchlist</h2>
-                <div className='watchlists-list'>
-                        {watchlist.map((movie) => (
-                            <MovieCard movie={movie} key={movie.id} />
-                        ))}
-                </div>
-            </div>
-        )
-    }
-    return <div className="watchlist-empty">
-        <h3>No movies on watchlist yet</h3>
-        <p>Start adding movies to your watchlist</p>
+  if (watchlist && watchlist.length > 0) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-4 text-gray-800">Watchlist</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {watchlist.map((movie) => (
+            <MovieCard movie={movie} key={movie.id} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="p-6 text-center text-gray-600">
+      <h3 className="text-lg font-semibold">No movies on watchlist yet</h3>
+      <p className="mt-2">Start adding movies to your watchlist</p>
     </div>
+  )
 }
 
-export default function Profile(){
-    return(
-        <section>
-            <Favourites />
-            <Likes />
-            <Watchlist />
-        </section>
-    )
+export default function Profile() {
+  return (
+    <section className="max-w-7xl mx-auto">
+      <Favourites />
+      <Likes />
+      <Watchlist />
+    </section>
+  )
 }

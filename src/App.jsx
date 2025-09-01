@@ -3,7 +3,9 @@ import Home from './pages/Home'
 import { Routes, Route } from 'react-router-dom'
 import { MovieProvider } from './contexts/MovieContext'
 import Favourite from './pages/Profile'
-import NavBar from './components/navbar'
+import NavBar from './components/NavBar'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/profile' element={<Favourite />} />
+        <Route path='/signin' element={<SignIn />} />
+        <Route path='/signup' element={<SignUp />} />
       </Routes>
       </main>
     </MovieProvider>

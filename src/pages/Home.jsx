@@ -1,66 +1,106 @@
 import { useState, useEffect } from "react"
 import { getPopularMovies, searchMovies } from "../services/api";
-import  MovieList from "../components/MovieList";
+import MovieList from "../components/MovieList";
 
 function Home() {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [movies, setMovies] = useState([]);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [movies, setMovies] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
-    useEffect(() => {
-        const loadPopularMovies = async () => {
-            try {
-                const popularMovies = await getPopularMovies()
-                setMovies(popularMovies)
-            }
-            catch(err) {
-                console.log(err)
-                setError("Failed to load data...")
-            }
-            finally{
-                setLoading(false)
-            }
-        }
-        loadPopularMovies()
-    }, [])
-    
+  useEffect(() => {
+    loadPopularMovies(page);
+    // eslint-disable-next-line
+  }, [page]);
 
-    const handleSearch = async (e) => {
-        e.preventDefault()
-        if (!searchQuery.trim()) return
-        if (loading) return
-        
-        setLoading(true)
-        try{
-            const searchResults = await searchMovies(searchQuery)
-            setMovies(searchResults)
-            setError(null)
-        } catch(err){
-            console.log(err)
-            setError("Failed to search movies...")
-        } finally {
-            setLoading(false)
-        }
+  const loadPopularMovies = async (pageNum) => {
+    try {
+      setLoading(true);
+      const popularMovies = await getPopularMovies(pageNum);
 
-        setSearchQuery("");
+      if (popularMovies.length === 0) {
+        setHasMore(false);
+      } else {
+        setMovies((prev) => [...prev, ...popularMovies]);
+      }
+    } catch (err) {
+      console.log(err);
+      setError("Failed to load data...");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    return <div className="movie">
-        <form onSubmit={handleSearch} className="search-form">
-            <input type="text" placeholder="Search.." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
-            <button type="submit" className="search-button">Search</button>
-        </form>
+  const handleSearch = async (e) => {
+    e.preventDefault()
+    if (!searchQuery.trim()) return
 
-        {error && <div className="error-message">{error}</div>}
+    setLoading(true)
+    try {
+      const searchResults = await searchMovies(searchQuery)
+      setMovies(searchResults)
+      setError(null)
+      setHasMore(false);
+    } catch (err) {
+      console.log(err)
+      setError("Failed to search movies...")
+    } finally {
+      setLoading(false)
+    }
+    setSearchQuery("");
+  }
 
-        {loading ? 
-        (<div className="loading">Loading...</div>) :
-        (<div className="movie-list">
-            <MovieList movies={movies}/>
-        </div> 
-        )}
+  return (
+    <div className="p-6 max-w-7xl mx-auto">
+      {/* Search Bar */}
+      <form
+        onSubmit={handleSearch}
+        className="flex items-center gap-2 mb-6"
+      >
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+        >
+          Search
+        </button>
+      </form>
+
+      {/* Error Message */}
+      {error && (
+        <div className="text-red-600 font-semibold mb-4">
+          {error}
+        </div>
+      )}
+
+      {/* Movie List */}
+      <MovieList movies={movies}/>
+
+      {/* Load More Button */}
+      {hasMore && !loading && (
+        <div className="flex justify-center mt-6">
+            <button
+                onClick={() => setPage((prev) => prev + 1)}
+                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+            >
+                Load More
+            </button>
+        </div>
+      )}
+
+      {/* Loading Indicator */}
+      {loading && <div className="text-center text-gray-600">Loading...</div>}
     </div>
+  )
 }
 
-export default Home
+export default Home;
+
