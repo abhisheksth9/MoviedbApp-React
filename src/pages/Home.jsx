@@ -23,7 +23,13 @@ function Home() {
       if (popularMovies.length === 0) {
         setHasMore(false);
       } else {
+        if (pageNum === 1) {
+        // First page → replace movies
+        setMovies(popularMovies);
+      } else {
+        // Next pages → append movies
         setMovies((prev) => [...prev, ...popularMovies]);
+      }
       }
     } catch (err) {
       console.log(err);

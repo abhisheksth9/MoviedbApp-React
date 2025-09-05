@@ -6,6 +6,8 @@ import Favourite from './pages/Profile'
 import NavBar from './components/NavBar'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
+import MovieDetails from './pages/MovieDetails'
+import PersonDetails from './pages/PersonDetails'
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path='/profile' element={<Favourite />} />
         <Route path='/signin' element={<SignIn />} />
         <Route path='/signup' element={<SignUp />} />
+        <Route path='/movie/:id' element={<MovieDetails />} />
+        <Route path="/person/:id" element={<PersonDetails />} />  
       </Routes>
       </main>
     </MovieProvider>

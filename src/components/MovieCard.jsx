@@ -33,10 +33,22 @@ function MovieCard({ movie }) {
         <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition relative">
         {/* Poster */}
         <div className="relative">
+           {movie.poster_path ? (
             <img
-            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-            alt={movie.title}
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.style.display = 'none';
+                e.target.parentNode.innerHTML = `<div class='text-center px-2 text-sm text-gray-700'>No poster available</div>`;
+              }}
             />
+            ) : (
+              <div className="text-center px-2 text-sm text-gray-700">
+                No poster available
+              </div>
+            )}
             {/* Score Badge */}
             <div className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 rounded-lg text-sm font-bold shadow">
                 {movie.vote_average.toFixed(1)}
