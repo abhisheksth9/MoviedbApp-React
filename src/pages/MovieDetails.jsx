@@ -7,7 +7,7 @@ function MovieDetails() {
   const [movie, setMovie] = useState(null);
   const [credits, setCredits] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("cast"); // 👈 default tab
+  const [activeTab, setActiveTab] = useState("cast");
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -56,7 +56,9 @@ function MovieDetails() {
             <strong>Genres:</strong>{" "}
             {movie.genres?.map((g, idx) => (
               <span key={g.id}>
-                <Link to={`/genre/${g.id}`} className="text-blue-600 hover:underline">
+                <Link 
+                  to={`/genre/${g.id}`} 
+                  className="text-blue-600 hover:underline">
                   {g.name}
                 </Link>
                 {idx < movie.genres.length - 1 && ", "}
@@ -113,7 +115,7 @@ function MovieDetails() {
           {/* Crew */}
           {activeTab === "crew" && (
             <div className="space-y-6">
-              {["Director", "Writer", "Screenplay", "Cinematography", "Music"].map((role) => {
+              {["Director", "Writer", "Cinematography", "Music"].map((role) => {
                 const people = crew.filter((c) =>
                   role === "Writer"
                     ? c.job === "Writer" || c.department === "Writing"
