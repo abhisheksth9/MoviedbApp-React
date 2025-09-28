@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { searchMovies } from "../services/api";
-import MovieList from "../components/MovieList";
+import MovieList from "./MovieList";
 
 function SearchResults() {
   const { query } = useParams();

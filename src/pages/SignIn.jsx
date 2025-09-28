@@ -1,53 +1,86 @@
 import { useState } from "react";
+import { loginUser } from "../services/authApi";
+import { useNavigate } from "react-router-dom";
 
-export default function SignIn() {
-  const [form, setForm] = useState({ email: "", password: "" });
+function SignIn() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Logging in:", form);
-    // Later: API for authentication
+    try {
+      const res = await loginUser({ email, password });
+      console.log("Logged in:", res.data);
+
+      // Save token (if returned)
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      }
+
+      // Redirect after login
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Invalid credentials");
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-8 rounded-2xl shadow-lg w-96"
-      >
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign In</h2>
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded-lg"
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full p-2 mb-4 border rounded-lg"
-          required
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition"
-        >
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 via-gray-800 to-black">
+      <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">
           Sign In
-        </button>
-      </form>
+        </h2>
+
+        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Email Address
+            </label>
+            <input
+              type="email"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-600"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Sign In
+          </button>
+        </form>
+
+        <p className="text-gray-600 text-sm mt-6 text-center">
+          Don’t have an account?{" "}
+          <a href="/SignUp" className="text-blue-600 hover:underline">
+            Sign Up
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
+
+export default SignIn;
